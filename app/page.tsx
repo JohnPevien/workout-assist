@@ -1,102 +1,102 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect } from "react";
+import PlanningMode from "./components/PlanningMode";
+import TrackingMode from "./components/TrackingMode";
+
+type Workout = {
+  name: string;
+  sets: number;
+  reps: number;
+  completedSets: boolean[];
+};
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  // Load initial state from localStorage or use defaults
+  const [workouts, setWorkouts] = useState<Workout[]>(() => {
+    if (typeof window === "undefined") return [];
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+    const savedWorkouts = localStorage.getItem("workouts");
+    return savedWorkouts ? JSON.parse(savedWorkouts) : [];
+  });
+
+  const [mode, setMode] = useState<"planning" | "tracking">(() => {
+    if (typeof window === "undefined") return "planning";
+
+    const savedMode = localStorage.getItem("mode");
+    return savedMode === "tracking" ? "tracking" : "planning";
+  });
+
+  // Save state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("workouts", JSON.stringify(workouts));
+    localStorage.setItem("mode", mode);
+  }, [workouts, mode]);
+
+  // Handle adding a new workout
+  const handleAddWorkout = (newWorkout: {
+    name: string;
+    sets: number;
+    reps: number;
+  }) => {
+    const workoutWithSets = {
+      ...newWorkout,
+      completedSets: Array(newWorkout.sets).fill(false),
+    };
+    setWorkouts([...workouts, workoutWithSets]);
+  };
+
+  // Handle removing a workout
+  const handleRemoveWorkout = (index: number) => {
+    setWorkouts(workouts.filter((_, i) => i !== index));
+  };
+
+  // Handle toggling a set's completion status
+  const handleToggleSet = (workoutIndex: number, setIndex: number) => {
+    const newWorkouts = [...workouts];
+    const newCompletedSets = [...newWorkouts[workoutIndex].completedSets];
+    newCompletedSets[setIndex] = !newCompletedSets[setIndex];
+    newWorkouts[workoutIndex] = {
+      ...newWorkouts[workoutIndex],
+      completedSets: newCompletedSets,
+    };
+    setWorkouts(newWorkouts);
+  };
+
+  // Handle resetting the session
+  const handleReset = () => {
+    setWorkouts([]);
+    setMode("planning");
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 dark:text-white flex flex-col items-center p-4">
+      <header className="w-full max-w-md mb-4">
+        <h1 className="text-2xl font-bold">Workout Assist</h1>
+        <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">
+          {mode === "planning" ? "Plan your workout routine" : "Track your workout progress"}
+        </p>
+      </header>
+      
+      <main className="w-full max-w-md flex-1">
+        {mode === "planning" ? (
+          <PlanningMode
+            workouts={workouts}
+            onAddWorkout={handleAddWorkout}
+            onRemoveWorkout={handleRemoveWorkout}
+            onStartSession={() => setMode("tracking")}
+          />
+        ) : (
+          <TrackingMode
+            workouts={workouts}
+            onToggleSet={handleToggleSet}
+            onReset={handleReset}
+          />
+        )}
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      
+      <footer className="w-full max-w-md mt-6 pt-4 border-t border-gray-200 dark:border-gray-700 text-center text-xs text-gray-500 dark:text-gray-400">
+        <p>Workout data is saved locally in your browser</p>
       </footer>
     </div>
   );
