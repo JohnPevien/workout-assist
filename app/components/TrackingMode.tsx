@@ -110,7 +110,11 @@ export default function TrackingMode({ workouts, onToggleSet, onReset }: Trackin
       )}
       
       <Button
-        onClick={onReset}
+        onClick={() => {
+          if (confirm("Are you sure you want to reset the current session? This will clear all progress.")) {
+            onReset();
+          }
+        }}
         variant="destructive"
         className="w-full"
       >
