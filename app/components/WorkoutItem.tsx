@@ -45,8 +45,11 @@ export default function WorkoutItem({ workout, onRemove, onToggleSet }: WorkoutI
             </div>
             
             <div className="mt-1">
-              <div className="flex items-center gap-2 mb-1">
+              <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium">Sets completed:</span>
+                <span className="text-sm font-semibold text-primary">
+                  {workout.completedSets.filter(Boolean).length}/{workout.sets}
+                </span>
               </div>
               <div className="flex flex-wrap gap-3">
                 {workout.completedSets.map((completed, index) => (
