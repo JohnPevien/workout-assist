@@ -1,4 +1,14 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Workout Assist
+
+A simple, browser-based workout planning and tracking application built with Next.js.
+
+## Features
+
+- Plan your workout routine by adding exercises with sets and reps
+- Track your progress during workouts with set completion tracking
+- Built-in rest timer to manage breaks between sets
+- Offline-capable with browser local storage for data persistence
+- Clean, responsive UI that works on mobile and desktop
 
 ## Getting Started
 
@@ -16,9 +26,19 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How to Use
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Planning Mode**: Add exercises to your workout plan using the form
+2. Click "Start Session" to begin your workout
+3. **Tracking Mode**: Toggle set completion and use the built-in timer for rest periods
+4. Reset the session when finished
+
+## Technologies Used
+
+- Next.js 13+ with App Router
+- React with Hooks
+- TypeScript
+- Tailwind CSS
 
 ## Learn More
 
