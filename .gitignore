@@ -41,3 +41,13 @@ yarn-error.log*
 next-env.d.ts
 
 .tempfiles
+
+# AI tool directories and files
+context/
+.claude/
+.windsurf/
+.windsurfrules
+.clinerules
+CLAUDE.md
+CRUSH.md
+.github/copilot-instructions.md
