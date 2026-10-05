@@ -1,56 +1,35 @@
 # Workout Assist
 
-A simple, browser-based workout planning and tracking application built with Next.js.
+Workout Assist helps you create workout plans, track sets during an active session, and review completed sessions. The product is moving from a local browser MVP to backend-backed persistence for reusable plans and workout history.
 
-## Features
+## Product status
 
-- Plan your workout routine by adding exercises with sets and reps
-- Track your progress during workouts with set completion tracking
-- Built-in rest timer to manage breaks between sets
-- Offline-capable with browser local storage for data persistence
-- Clean, responsive UI that works on mobile and desktop
+The current UI is the localStorage MVP: plan one session, track completed sets, use the optional rest timer, and reset the session. Backend persistence, accounts, reusable plan storage, and session history are planned and are not implemented yet.
 
-## Getting Started
+Canonical project context lives in:
 
-First, run the development server:
+- [`prd.md`](./prd.md) - product requirements and expansion scope
+- [`spec.md`](./spec.md) - technical contract and current implementation
+- [`taste.md`](./taste.md) - engineering preferences
+
+## Getting started
+
+Install dependencies and run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-## How to Use
+## Current technologies
 
-1. **Planning Mode**: Add exercises to your workout plan using the form
-2. Click "Start Session" to begin your workout
-3. **Tracking Mode**: Toggle set completion and use the built-in timer for rest periods
-4. Reset the session when finished
+- Next.js 15 with App Router and Turbopack
+- React 19 and TypeScript 5
+- Tailwind CSS v4
+- shadcn/Radix UI primitives
+- Lucide React
+- pnpm
 
-## Technologies Used
-
-- Next.js 13+ with App Router
-- React with Hooks
-- TypeScript
-- Tailwind CSS
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See `spec.md` for current behavior and implementation boundaries. See `prd.md` before making backend or product-scope decisions.
