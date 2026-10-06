@@ -39,6 +39,8 @@ export default function AddWorkoutForm({ onAddWorkout }: AddWorkoutFormProps) {
     }
   };
 
+  const isValid = formData.name.trim() !== "" && formData.sets > 0 && formData.reps > 0;
+
   return (
     <Card>
       <CardContent className="pt-6">
@@ -52,6 +54,7 @@ export default function AddWorkoutForm({ onAddWorkout }: AddWorkoutFormProps) {
               value={formData.name}
               onChange={handleChange}
               placeholder="e.g., Push-ups, Squats, etc."
+              required
             />
           </div>
           
@@ -81,8 +84,8 @@ export default function AddWorkoutForm({ onAddWorkout }: AddWorkoutFormProps) {
             </div>
           </div>
           
-          <Button type="submit" className="w-full">
-            Add Workout
+          <Button type="submit" className="w-full" disabled={!isValid}>
+            {isValid ? "Add Workout" : "Enter exercise details"}
           </Button>
         </form>
       </CardContent>
