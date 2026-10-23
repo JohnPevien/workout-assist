@@ -15,9 +15,37 @@ export default function Home() {
   // Load initial state from localStorage or use defaults
   const [workouts, setWorkouts] = useState<Workout[]>(() => {
     if (typeof window === "undefined") return [];
-
-    const savedWorkouts = localStorage.getItem("workouts");
-    return savedWorkouts ? JSON.parse(savedWorkouts) : [];
+    try {
+      const savedWorkouts = localStorage.getItem("workouts");
+      if (!savedWorkouts) return [];
+      const parsed: unknown = JSON.parse(savedWorkouts);
+      if (!Array.isArray(parsed)) {
+        localStorage.setItem("workouts", "[]");
+        return [];
+      }
+      return (parsed as Workout[]).map((w) => {
+        const sets = Number.isFinite(w?.sets)
+          ? Math.min(100, Math.max(1, Math.floor(w.sets)))
+          : 1;
+        const reps = Number.isFinite(w?.reps)
+          ? Math.min(100, Math.max(1, Math.floor(w.reps)))
+          : 1;
+        const completedSets =
+          Array.isArray(w?.completedSets) &&
+          w.completedSets.length === sets
+            ? w.completedSets.map(Boolean)
+            : Array(sets).fill(false);
+        return {
+          name: typeof w?.name === "string" ? w.name : "",
+          sets,
+          reps,
+          completedSets,
+        };
+      });
+    } catch {
+      localStorage.setItem("workouts", "[]");
+      return [];
+    }
   });
 
   const [mode, setMode] = useState<"planning" | "tracking">(() => {

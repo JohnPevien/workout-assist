@@ -34,7 +34,11 @@ export default function AddWorkoutForm({ onAddWorkout }: AddWorkoutFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.name && formData.sets > 0 && formData.reps > 0) {
-      onAddWorkout(formData);
+      onAddWorkout({
+        name: formData.name,
+        sets: Math.min(100, Math.max(1, Math.floor(formData.sets) || 0)),
+        reps: Math.min(100, Math.max(1, Math.floor(formData.reps) || 0)),
+      });
       setFormData({ name: "", sets: 3, reps: 12 });
     }
   };
@@ -68,6 +72,7 @@ export default function AddWorkoutForm({ onAddWorkout }: AddWorkoutFormProps) {
                 value={formData.sets}
                 onChange={handleChange}
                 min={1}
+                max={100}
               />
             </div>
             
@@ -80,6 +85,7 @@ export default function AddWorkoutForm({ onAddWorkout }: AddWorkoutFormProps) {
                 value={formData.reps}
                 onChange={handleChange}
                 min={1}
+                max={100}
               />
             </div>
           </div>
